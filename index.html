@@ -121,6 +121,13 @@
             100% { clip-path: inset(60% 0 1% 0); }
         }
         
+        .device-text {
+            font-size: clamp(0.8rem, 3vw, 1rem);
+            margin-top: 1rem;
+            color: var(--neon-blue);
+            text-shadow: 0 0 5px var(--neon-blue);
+        }
+        
         .footer {
             position: fixed;
             bottom: 0;
@@ -201,6 +208,7 @@
     <div class="grid-overlay"></div>
     <main class="content">
         <h1 class="logo glitch" data-text="NOWHILE">NOWHILE</h1>
+        <div class="device-text glitch" id="device-text" data-text="You are viewing from "></div>
     </main>
     
     <div class="social-icons">
@@ -340,6 +348,29 @@
         });
         
         animate();
+
+        // Device Detection
+        const deviceText = document.getElementById('device-text');
+        const userAgent = navigator.userAgent;
+
+        let deviceName = "Unknown Device";
+
+        if (/iPhone/.test(userAgent)) {
+            deviceName = "iPhone";
+        } else if (/iPad/.test(userAgent)) {
+            deviceName = "iPad";
+        } else if (/Macintosh/.test(userAgent)) {
+            deviceName = "MacBook";
+        } else if (/Windows/.test(userAgent)) {
+            deviceName = "Windows PC";
+        } else if (/Android/.test(userAgent)) {
+            deviceName = "Android Device";
+        } else if (/Linux/.test(userAgent)) {
+            deviceName = "Linux Device";
+        }
+
+        deviceText.setAttribute('data-text', `You are viewing from ${deviceName}`);
+        deviceText.textContent = `You are viewing from ${deviceName}`;
     </script>
 </body>
 </html>
