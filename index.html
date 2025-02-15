@@ -7,7 +7,6 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
-        /* Previous styles remain the same until globe styles */
         :root {
             --neon-blue: #00f3ff;
             --dark-bg: #050815;
@@ -63,7 +62,7 @@
         }
         
         .logo {
-            font-size: 4rem;
+            font-size: clamp(2.5rem, 8vw, 4rem); /* Responsive font size */
             font-weight: 800;
             letter-spacing: 0.2em;
             margin-bottom: 1rem;
@@ -100,7 +99,6 @@
             animation: glitch-2 3s infinite linear alternate-reverse;
         }
         
-        /* Previous animations and media queries remain the same */
         @keyframes glitch-1 {
             0% { clip-path: inset(20% 0 80% 0); }
             20% { clip-path: inset(60% 0 1% 0); }
@@ -119,7 +117,36 @@
             100% { clip-path: inset(60% 0 1% 0); }
         }
         
-        /* Rest of previous styles remain the same */
+        .social-icons {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .social-icon {
+            color: var(--neon-blue);
+            font-size: 1.5rem;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+        
+        .social-icon:hover {
+            transform: translateY(-5px);
+            color: white;
+        }
+        
+        @media (max-width: 768px) {
+            .logo {
+                letter-spacing: 0.1em;
+            }
+            
+            .social-icons {
+                gap: 1rem;
+            }
+            
+            .social-icon {
+                font-size: 1.2rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -148,9 +175,14 @@
         // Three.js Globe Implementation
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('globe-canvas'), alpha: true });
+        const renderer = new THREE.WebGLRenderer({ 
+            canvas: document.getElementById('globe-canvas'), 
+            alpha: true,
+            antialias: true 
+        });
         
         renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Optimize for high-DPI screens
         camera.position.z = 5;
         
         // Create Globe
@@ -165,7 +197,7 @@
         
         // Create Particle System
         const particlesGeometry = new THREE.BufferGeometry();
-        const particlesCount = 2000;
+        const particlesCount = window.innerWidth < 768 ? 1000 : 2000; // Reduce particles on mobile
         const posArray = new Float32Array(particlesCount * 3);
         
         for(let i = 0; i < particlesCount * 3; i++) {
@@ -222,9 +254,16 @@
         let mouseX = 0;
         let mouseY = 0;
         
-        document.addEventListener('mousemove', (event) => {
-            mouseX = (event.clientX - window.innerWidth / 2) * 0.0005;
-            mouseY = (event.clientY - window.innerHeight / 2) * 0.0005;
+        // Mouse and Touch Event Handling
+        const handleInput = (clientX, clientY) => {
+            mouseX = (clientX - window.innerWidth / 2) * 0.0005;
+            mouseY = (clientY - window.innerHeight / 2) * 0.0005;
+        };
+        
+        document.addEventListener('mousemove', (event) => handleInput(event.clientX, event.clientY));
+        document.addEventListener('touchmove', (event) => {
+            event.preventDefault();
+            handleInput(event.touches[0].clientX, event.touches[0].clientY);
         });
         
         function animate() {
