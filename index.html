@@ -121,13 +121,6 @@
             100% { clip-path: inset(60% 0 1% 0); }
         }
         
-        .device-text {
-            font-size: clamp(0.8rem, 3vw, 1rem);
-            margin-top: 1rem;
-            color: var(--neon-blue);
-            text-shadow: 0 0 5px var(--neon-blue);
-        }
-        
         .footer {
             position: fixed;
             bottom: 0;
@@ -155,6 +148,23 @@
         .footer .glitch::before,
         .footer .glitch::after {
             background: rgba(0, 0, 0, 0.8); /* Darker background for glitch effect */
+        }
+        
+        .device-text {
+            font-size: clamp(0.8rem, 3vw, 1rem);
+            margin-top: 0.5rem;
+            color: var(--neon-blue);
+            text-shadow: 0 0 5px var(--neon-blue);
+            cursor: pointer;
+        }
+        
+        .device-text .reveal {
+            display: none;
+            font-weight: bold;
+        }
+        
+        .device-text.clicked .reveal {
+            display: inline;
         }
         
         .social-icons {
@@ -208,7 +218,6 @@
     <div class="grid-overlay"></div>
     <main class="content">
         <h1 class="logo glitch" data-text="NOWHILE">NOWHILE</h1>
-        <div class="device-text glitch" id="device-text" data-text="You are viewing from "></div>
     </main>
     
     <div class="social-icons">
@@ -230,6 +239,9 @@
         <p>
             <span class="glitch" data-text="Made with ❤️ by Ansh">Made with ❤️ by Ansh</span>
         </p>
+        <div class="device-text" id="device-text">
+            Viewing from: <span class="reveal glitch" data-text=""></span>
+        </div>
     </footer>
     
     <script>
@@ -351,6 +363,7 @@
 
         // Device Detection
         const deviceText = document.getElementById('device-text');
+        const revealText = deviceText.querySelector('.reveal');
         const userAgent = navigator.userAgent;
 
         let deviceName = "Unknown Device";
@@ -369,8 +382,12 @@
             deviceName = "Linux Device";
         }
 
-        deviceText.setAttribute('data-text', `You are viewing from ${deviceName}`);
-        deviceText.textContent = `You are viewing from ${deviceName}`;
+        // Click to Reveal Effect
+        deviceText.addEventListener('click', () => {
+            deviceText.classList.add('clicked');
+            revealText.setAttribute('data-text', deviceName);
+            revealText.textContent = deviceName;
+        });
     </script>
 </body>
 </html>
