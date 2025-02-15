@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NOWHILE.COM - Coming Soon</title>
+    <title>NOWHILE</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
         :root {
             --neon-blue: #00f3ff;
-            --dark-bg: #050815;
+            --dark-bg: #000000; /* Black background */
         }
         
         * {
@@ -26,7 +26,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start; /* Align content to the top */
             overflow: hidden;
             position: relative;
         }
@@ -61,13 +61,11 @@
             padding: 2rem;
             width: 100%;
             max-width: 800px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            margin-top: 5vh; /* Small gap from the top */
         }
         
         .logo {
-            font-size: clamp(2.5rem, 8vw, 4rem);
+            font-size: clamp(1.5rem, 6vw, 2.5rem); /* Smaller heading size */
             font-weight: 800;
             letter-spacing: 0.2em;
             margin-bottom: 1rem;
@@ -131,7 +129,7 @@
             text-align: center;
             padding: 1rem;
             z-index: 4;
-            background: rgba(5, 8, 21, 0.8);
+            background: rgba(0, 0, 0, 0.8); /* Darker footer background */
             backdrop-filter: blur(5px);
         }
         
@@ -149,7 +147,7 @@
         
         .footer .glitch::before,
         .footer .glitch::after {
-            background: rgba(5, 8, 21, 0.8);
+            background: rgba(0, 0, 0, 0.8); /* Darker background for glitch effect */
         }
         
         .social-icons {
@@ -202,8 +200,7 @@
     <canvas id="globe-canvas"></canvas>
     <div class="grid-overlay"></div>
     <main class="content">
-        <h1 class="logo glitch" data-text="NOWHILE.COM">NOWHILE.COM</h1>
-        <h2 class="subheading">COMING SOON</h2>
+        <h1 class="logo glitch" data-text="NOWHILE">NOWHILE</h1>
     </main>
     
     <div class="social-icons">
@@ -241,8 +238,8 @@
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Optimize for high-DPI screens
         camera.position.z = 5;
         
-        // Create Globe
-        const sphereGeometry = new THREE.SphereGeometry(2, 32, 32);
+        // Create Globe (smaller size)
+        const sphereGeometry = new THREE.SphereGeometry(1.5, 32, 32); // Reduced globe size
         const sphereMaterial = new THREE.MeshBasicMaterial({
             color: 0x00f3ff,
             wireframe: true,
@@ -253,7 +250,7 @@
         
         // Create Particle System
         const particlesGeometry = new THREE.BufferGeometry();
-        const particlesCount = window.innerWidth < 768 ? 1000 : 2000; // Reduce particles on mobile
+        const particlesCount = window.innerWidth < 768 ? 800 : 1500; // Reduced particles for performance
         const posArray = new Float32Array(particlesCount * 3);
         
         for(let i = 0; i < particlesCount * 3; i++) {
@@ -274,7 +271,7 @@
         scene.add(particlesMesh);
         
         // Add outer glow
-        const glowGeometry = new THREE.SphereGeometry(2.1, 32, 32);
+        const glowGeometry = new THREE.SphereGeometry(1.6, 32, 32); // Adjusted glow size
         const glowMaterial = new THREE.ShaderMaterial({
             uniforms: {
                 c: { type: "f", value: 0.5 },
